@@ -7,6 +7,8 @@ The goal is to allows Nginx to check all the requests are authenticated centrall
 less secure services. Then if the user is unauthenticated they shall be required to log in via Praga. Praga
 provides the capability for users to log in with an email verification code.
 
+![Praga in action](./praga.gif)
+
 Currently supports sending emails via [Mailjet](https://www.mailjet.com), but integration to other services is
 likely trivial.
 

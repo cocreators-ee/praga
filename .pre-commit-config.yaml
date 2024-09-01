@@ -19,7 +19,7 @@ repos:
       - id: check-yaml
         files: \.ya?ml$
       - id: check-added-large-files
-        args: [ "--maxkb=600" ]
+        args: [ "--maxkb=800" ]
       - id: check-merge-conflict
       # All non-bat files should end with LF
       - id: mixed-line-ending
