@@ -1,0 +1,41 @@
+title: Secret Login  # Webpage title
+brand: Private Area  # Used in emails and on the webpage
+support: support@example.com  # Shared in emails and on the webpage as contact information for support
+
+server:
+  listen_type: http  # http or unix
+  socket: /run/user/1000/praga.sock  # For unix
+  host: 0.0.0.0  # For http
+  port: 8086  # For http
+
+cookie_auth:
+  cookie_name: PRAGA_TOKEN
+  domain: my.domain  # Set to top level domain to protect multiple subdomains
+  secure: true  # Make sure to keep this true if this is behind HTTPS, set to false for localhost testing
+
+signing_key: "openssl rand -hex 32"  # Key used to generate verification tokens and sign access tokens
+
+jwt:
+  valid_seconds: 86400  # How long the login is valid for, 1 day = 86,400 seconds
+
+auth:
+  mode: email  # No other options yet
+  email_provider: mailjet  # No other options yet
+
+mailjet:
+  apikey_public: ""  # Also parsing the MJ_APIKEY_PUBLIC environment variable
+  apikey_private: ""  # Also parsing the MJ_APIKEY_PRIVATE environment variable
+
+email:
+  from: login@email.my.domain  # The from address for verification codes, ensure it's a valid sender
+  from_name: "My Private Area"  # The from "name" for the emails
+
+  # Allow entire domains to log in
+  valid_domains:
+    - example.com
+  # valid_domains: []  # Alternatively allow no domains
+
+  # Allow individual email addresses
+  valid_emails:
+    - user@example.com
+  # valid_emails: []  # If you plan to use just domains

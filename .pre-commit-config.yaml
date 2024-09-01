@@ -1,0 +1,80 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: |
+          (?x)(
+            ^.*/vendor/.*$|
+            ^NOT-EXISTING-LAST-ENTRY$
+          )
+      - id: end-of-file-fixer
+        exclude: |
+          (?x)(
+            ^.*/vendor/.*$|
+            ^NOT-EXISTING-LAST-ENTRY$
+          )
+      - id: check-yaml
+        files: \.ya?ml$
+      - id: check-added-large-files
+        args: [ "--maxkb=600" ]
+      - id: check-merge-conflict
+      # All non-bat files should end with LF
+      - id: mixed-line-ending
+        name: Ensure LF endings on most files
+        args: [ "--fix=lf" ]
+        exclude: \.bat$
+      # Bat files should end with CRLF
+      - id: mixed-line-ending
+        name: Ensure CFLF endings on Windows files
+        args: [ "--fix=crlf" ]
+        files: \.bat$
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
+        exclude: ^.*/vendor/
+        args: [ "-x" ]
+
+  - repo: local
+    hooks:
+      - id: pnpm-audit-frontend
+        name: pnpm audit frontend
+        entry: pnpm -C frontend audit --fix --audit-level moderate
+        language: system
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier
+        entry:
+          pnpm dlx prettier@next --print-width 110 --trailing-comma es5 --no-semi --prose-wrap always --write
+          .
+        files: |
+          (?x)^(
+            \.yaml$|
+            \.yml$|
+            \.js$|
+            \.ts$|
+            \.svelte$|
+            \.json$|
+            \.cjs$|
+            \.css|
+            \.scss|
+            \.xml|
+            \.html|
+            \.toml|
+            \.md$|
+            (^|/)\.|
+          )$
+        language: system
+        pass_filenames: false
+
+  - repo: https://github.com/mattkram/mjml-hook
+    rev: 0.1.0
+    hooks:
+      - id: mjml

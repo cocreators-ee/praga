@@ -1,0 +1,37 @@
+<mjml>
+  <mj-body background-color="#ccd3e0" font-size="13px">
+    <mj-section background-color="#fff" padding-bottom="20px" padding-top="20px">
+      <mj-column width="100%">
+        <mj-text align="center" font-size="16px" color="#000" font-family="Ubuntu, Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">
+          <p>Verification code for {{var:brand:""}}</p>
+					<p style="font-size: 13px;">Someone requested a verification code to log in to {{var:brand:""}}</p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#356cc7" padding-bottom="28px" padding-top="20px">
+      <mj-column width="100%">
+        <mj-text align="center" font-size="16px" color="#ABCDEA" font-family="Ubuntu, Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">
+          <p style="color:white">Your authentication code for {{var:brand:""}}</p>
+        </mj-text>
+        <mj-text align="center" color="#FFF" font-size="28px" font-family="Helvetica" padding-left="25px" padding-right="25px" padding-top="8px"><span style="font-weight:bold">{{var:code:""}}</span>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#fff" padding-bottom="20px" padding-top="20px">
+      <mj-column width="100%">
+        <mj-text align="center" font-size="14px" color="#000" font-family="Ubuntu, Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">
+          <p>This code is valid for 15 minutes.</p>
+          <p>If you did not request the code, someone probably entered your email address by mistake.</p>
+          <p>You can safely ignore this email.</p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ccd3e0" padding-bottom="5px" padding-top="0">
+      <mj-column width="100%">
+        <mj-text align="center" color="#777" font-size="15px" font-family="Helvetica" padding-left="25px" padding-right="25px" padding-bottom="20px" padding-top="20px">
+          <span style="font-size:15px">Please contact {{var:support:""}} in case of issues.</span>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
