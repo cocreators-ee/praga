@@ -1,0 +1,38 @@
+# ----- Frontend build ----- #
+
+FROM ghcr.io/lietu/nodejs-base:ubuntu22.04-node18 AS frontend
+
+WORKDIR /src/praga/frontend
+ADD frontend/package.json frontend/pnpm-lock.yaml ./
+RUN pnpm install
+
+ADD frontend ./
+RUN pnpm run build
+
+# ----- Praga build ----- #
+
+FROM golang:1.23-bookworm AS praga-build
+
+WORKDIR /go/src/cocreators-ee/praga/
+ADD go.mod go.sum embed.go ./
+RUN go mod download
+
+ADD email email
+COPY --from=frontend /src/praga/frontend/build /go/src/cocreators-ee/praga/frontend/build
+ADD backend backend
+ADD cmd cmd
+
+
+# RUN find .
+
+RUN go build ./cmd/praga/praga.go
+
+# ----- Nginx server ----- #
+
+FROM nginx AS runtime
+
+COPY --from=praga-build /go/src/cocreators-ee/praga/praga /usr/bin/praga
+ADD examples/nginx/index.html /usr/share/nginx/html/index.html
+ADD examples/nginx/99-start-praga.sh /docker-entrypoint.d/
+ADD examples/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
+ADD examples/nginx/praga.yaml /etc/praga.yaml

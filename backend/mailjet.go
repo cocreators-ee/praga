@@ -55,9 +55,9 @@ func (ms MailjetSender) sendEmailViaMailjet(email, brand, code, support string) 
 	}
 
 	messages := mailjet.MessagesV31{Info: messagesInfo}
-	res, err := ms.client.SendMailV31(&messages)
+	_, err := ms.client.SendMailV31(&messages)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Data: %+v\n", res)
+	//fmt.Printf("Data: %+v\n", res)
 }

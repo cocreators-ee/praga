@@ -167,7 +167,7 @@ func registerRoutes(srv *Server, r *chi.Mux) {
 	})
 
 	// Verify token from Nginx requests
-	r.Post("/api/verify-token", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/api/verify-token", func(w http.ResponseWriter, r *http.Request) {
 		token, err := r.Cookie(srv.Config.CookieAuth.CookieName)
 		if err != nil {
 			// Failed to read cookie

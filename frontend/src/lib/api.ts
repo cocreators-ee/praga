@@ -26,7 +26,7 @@ export async function getConfig(): Promise<ConfigResponse> {
 
 export async function verifyToken(): Promise<boolean> {
   const response = await fetch(`/api/verify-token`, {
-    method: "post",
+    method: "get",
     credentials: credentials,
   })
 

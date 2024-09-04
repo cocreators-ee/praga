@@ -24,7 +24,7 @@ type ServerConfig struct {
 }
 
 type RateLimitConfigItem struct {
-	PerHour int `yaml:"per_hour" validate:"required,gte=0,lte=100000"`
+	PerHour int `yaml:"per_hour" validate:"gte=0,lte=100000"`
 }
 
 type RateLimitConfig struct {
@@ -75,6 +75,8 @@ func LoadConfig(configPath string) (bool, Config) {
 	c.CookieAuth.CookieName = "PRAGA_TOKEN"
 	c.CookieAuth.Secure = true
 	c.Auth.Mode = "email"
+	c.Auth.EmailProvider = "mailjet"
+	c.JWT.ValidSeconds = 86400
 	c.Server.Host = "0.0.0.0"
 	c.Server.Port = 8086
 	c.Server.ListenType = "http"
