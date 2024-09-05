@@ -36,6 +36,10 @@ jobs:
           version: 9
           run_install: false
 
+      - name: Build frontend
+        run: |
+          pnpm -C frontend build
+
       - name: Install tools
         run: |
           pip install pre-commit
