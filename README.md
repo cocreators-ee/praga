@@ -3,21 +3,28 @@
 Provide authentication capabilities for proxy environments, designed particularly for use with
 Nginx `ngx_http_auth_request_module` module.
 
-The goal is to allows Nginx to check all the requests are authenticated centrally before passing them on to
-less secure services. Then if the user is unauthenticated they shall be required to log in via Praga. Praga
-provides the capability for users to log in with an email verification code.
+Allows Nginx to check all the requests are authenticated centrally before passing them on to less secure
+services. Then if the user is unauthenticated they shall be required to log in via Praga. Praga provides the
+capability for users to log in with an email verification code.
 
 ![Praga in action](./praga.gif)
 
+Depending on configuration of Praga and Nginx it should allow at least:
+
+- Access control for an individual domain
+- Access control for an individual path
+- Access control for a domain and its subdomains
+
 Currently supports sending emails via [Mailjet](https://www.mailjet.com), but integration to other services is
 likely trivial.
+
+Read more on `ngx_http_auth_request_module` usage at:
 
 - https://nginx.org/en/docs/http/ngx_http_auth_request_module.html
 - https://redbyte.eu/en/blog/using-the-nginx-auth-request-module/
 
 TODO:
 
-- Docker build
 - Release pipeline
 - Implement rate limits for email sending and code verification
 - Limit redirect targets from configuration
@@ -35,6 +42,15 @@ or
 ```shell
 ./praga --config=path/to/praga.yaml
 ```
+
+Check the [Nginx configuration example](./examples/nginx) for a [praga.yaml](./examples/nginx/praga.yaml) and
+[nginx site.conf](./examples/nginx/nginx-site.conf) that can help you get started with setup.
+
+See [praga.tpl.yaml](./praga.tpl.yaml) for information on what all things are configurable, key highlights:
+
+- Valid email domains or individual email addresses for login
+- Authentication token lifetime (defaults to 1 day)
+- Customization of names and support information shown to users
 
 # Docker example
 
@@ -68,6 +84,8 @@ pnpm -C frontend build
 go mod download
 go build cmd/praga/praga.go
 ```
+
+Example of how to build in Docker is provided in [Dockerfile.nginx](./Dockerfile.nginx)
 
 # Security
 
