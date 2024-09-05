@@ -64,7 +64,7 @@ jobs:
       # TODO: macOS build
 
       - name: Archive build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: artifacts
           path: |
@@ -72,7 +72,7 @@ jobs:
 
       # Release tagged pushes
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           body_path: RELEASE.txt
