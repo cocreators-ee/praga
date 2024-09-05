@@ -78,3 +78,14 @@ repos:
     rev: 0.1.0
     hooks:
       - id: mjml
+
+  - repo: https://github.com/lietu/go-pre-commit
+    rev: v0.1.0
+    hooks:
+      - id: errcheck
+      - id: go-fmt-goimports
+      - id: go-test
+      - id: go-vet
+      - id: gofumpt
+      - id: golint
+      - id: go-mod-tidy

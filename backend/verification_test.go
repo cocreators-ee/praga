@@ -7,8 +7,10 @@ import (
 	"time"
 )
 
-const signingKey = "abc123"
-const email = "user@example.com"
+const (
+	signingKey = "abc123"
+	email      = "user@example.com"
+)
 
 func TestEncodeBytes(t *testing.T) {
 	result := encodeBytes([]byte("abc"))
@@ -40,7 +42,7 @@ func TestMakeVerifyCodeUnique(t *testing.T) {
 	var tokens []string
 	prevTime := time.Now().Add(-timeChunks)
 
-	for i := 1; i <= 100; i += 1 {
+	for i := 1; i <= 100; i++ {
 		email := fmt.Sprintf("user%d@example.com", i)
 		newToken := MakeVerifyCodeNow(signingKey, email)
 		for _, oldToken := range tokens {

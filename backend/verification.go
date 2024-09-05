@@ -12,9 +12,11 @@ import (
 // Set of easily distinguishable characters
 // const CODE_CHARS = "23579CDFHJKLMNPQRSTVWXYZ"
 
-const CodeChars = "2379HJKLNQSTVXYZ" // Limited to a nice even 16 options
-const timeChunks = time.Duration(15) * time.Minute
-const hashLen = 8
+const (
+	CodeChars  = "2379HJKLNQSTVXYZ" // Limited to a nice even 16 options
+	timeChunks = time.Duration(15) * time.Minute
+	hashLen    = 8
+)
 
 // / encodeBytes Generates easy human-readable strings out of input bytes
 func encodeBytes(input []byte) string {

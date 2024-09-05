@@ -2,13 +2,16 @@ package backend
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/cocreators-ee/praga"
 	"github.com/mailjet/mailjet-apiv3-go/v4"
-	"log"
 )
 
-var verificationTemplateBytes, _ = praga.VerificationEmail.ReadFile("email/verification.html")
-var verificationTemplate = string(verificationTemplateBytes[:])
+var (
+	verificationTemplateBytes, _ = praga.VerificationEmail.ReadFile("email/verification.html")
+	verificationTemplate         = string(verificationTemplateBytes[:])
+)
 
 const textTemplate = "You can login to %s with the code %s or in case of issues contact %s for assistance."
 
@@ -59,5 +62,5 @@ func (ms MailjetSender) sendEmailViaMailjet(email, brand, code, support string) 
 	if err != nil {
 		log.Fatal(err)
 	}
-	//fmt.Printf("Data: %+v\n", res)
+	// fmt.Printf("Data: %+v\n", res)
 }

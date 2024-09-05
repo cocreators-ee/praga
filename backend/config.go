@@ -2,20 +2,23 @@ package backend
 
 import (
 	"errors"
-	"github.com/go-playground/validator/v10"
-	"github.com/goccy/go-yaml"
 	"log"
 	"os"
 	"reflect"
 	"strings"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/goccy/go-yaml"
 )
 
+// CookieAuthConfig contains configuration for cookie authentication
 type CookieAuthConfig struct {
 	CookieName string `yaml:"cookie_name" validate:"required,min=1,max=64"`
 	Domain     string `yaml:"domain" validate:"required,min=1,max=255"`
 	Secure     bool   `yaml:"secure" validate:""`
 }
 
+// ServerConfig contains configuration for the HTTP server
 type ServerConfig struct {
 	ListenType string `yaml:"listen_type" validate:"required,oneof=unix http"`
 	Socket     string `yaml:"socket" validate:"min=1,max=255"`
@@ -23,37 +26,44 @@ type ServerConfig struct {
 	Port       int    `yaml:"port" validate:"gte=1,lte=65535"`
 }
 
+// RateLimitConfigItem contains details for rate limiting
 type RateLimitConfigItem struct {
 	PerHour int `yaml:"per_hour" validate:"gte=0,lte=100000"`
 }
 
+// RateLimitConfig defines rate limiting for different things
 type RateLimitConfig struct {
-	Ip    RateLimitConfigItem `yaml:"ip"`
+	IP    RateLimitConfigItem `yaml:"ip"`
 	Email RateLimitConfigItem `yaml:"email"`
 }
 
+// JWTConfig configures the authentication token properties
 type JWTConfig struct {
 	ValidSeconds int `yaml:"valid_seconds" validate:"required,gte=1,lte=1576800000"`
 }
 
+// AuthConfig changes how authentication works
 type AuthConfig struct {
-	Mode          string          `yaml:"mode" validate:"required,oneof=email"`
-	EmailProvider string          `yaml:"email_provider" validate:"required,oneof=mailjet"`
-	RateLimit     RateLimitConfig `yaml:"rate_limit"`
+	Mode      string          `yaml:"mode" validate:"required,oneof=email"`
+	RateLimit RateLimitConfig `yaml:"rate_limit"`
 }
 
+// EmailConfig configures email related settings
 type EmailConfig struct {
-	ValidDomains []string `yaml:"valid_domains" validate:"dive,min=1,max=255"`
-	ValidEmails  []string `yaml:"valid_emails" validate:"dive,email"`
-	From         string   `yaml:"from" validate:"required,email"`
-	FromName     string   `yaml:"from_name" validate:"required,min=1"`
+	ValidDomains  []string `yaml:"valid_domains" validate:"dive,min=1,max=255"`
+	ValidEmails   []string `yaml:"valid_emails" validate:"dive,email"`
+	EmailProvider string   `yaml:"email_provider" validate:"required,oneof=mailjet"`
+	From          string   `yaml:"from" validate:"required,email"`
+	FromName      string   `yaml:"from_name" validate:"required,min=1"`
 }
 
+// MailjetConfig provides Mailjet API configuration
 type MailjetConfig struct {
 	APIKeyPublic  string `yaml:"apikey_public" validate:"min=0,max=255"`
 	APIKeyPrivate string `yaml:"apikey_private" validate:"min=0,max=255"`
 }
 
+// Config provides all the configuration parsed from praga.yaml
 type Config struct {
 	Title      string           `yaml:"title" validate:"min=1,max=64"`
 	Brand      string           `yaml:"brand" validate:"min=1,max=64"`
@@ -67,6 +77,7 @@ type Config struct {
 	JWT        JWTConfig        `yaml:"jwt"`
 }
 
+// LoadConfig loads a praga.yaml file and parses it into a Config
 func LoadConfig(configPath string) (bool, Config) {
 	c := &Config{}
 	c.Title = "Login"
@@ -75,7 +86,7 @@ func LoadConfig(configPath string) (bool, Config) {
 	c.CookieAuth.CookieName = "PRAGA_TOKEN"
 	c.CookieAuth.Secure = true
 	c.Auth.Mode = "email"
-	c.Auth.EmailProvider = "mailjet"
+	c.Email.EmailProvider = "mailjet"
 	c.JWT.ValidSeconds = 86400
 	c.Server.Host = "0.0.0.0"
 	c.Server.Port = 8086
@@ -105,7 +116,7 @@ func LoadConfig(configPath string) (bool, Config) {
 		c.Mailjet.APIKeyPublic = mjAPIKeyPublic
 	}
 
-	if c.Auth.EmailProvider == "mailjet" {
+	if c.Email.EmailProvider == "mailjet" {
 		if c.Mailjet.APIKeyPublic == "" || c.Mailjet.APIKeyPrivate == "" {
 			log.Fatal("Mailjet provider missing API key configuration")
 		}

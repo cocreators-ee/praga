@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/cocreators-ee/praga"
-	"github.com/go-chi/chi/v5/middleware"
 	"io/fs"
 	"log"
 	"net"
@@ -15,12 +13,16 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/cocreators-ee/praga"
+	"github.com/go-chi/chi/v5/middleware"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/unrolled/secure"
 )
 
-const DEBUG = false
+const debug = false
 
+// Server provides the interface for setting up a HTTP server
 type Server struct {
 	Config        Config
 	MailjetSender *MailjetSender
@@ -54,9 +56,9 @@ func (s *Server) getRouter() *chi.Mux {
 		panic(err)
 	}
 
-	if DEBUG {
+	if debug {
 		log.Print("Embedded filesystem to be served as static files:")
-		fs.WalkDir(buildFs, ".", func(path string, d fs.DirEntry, err error) error {
+		err := fs.WalkDir(buildFs, ".", func(path string, d fs.DirEntry, err error) error {
 			if err != nil {
 				return err
 			}
@@ -67,6 +69,9 @@ func (s *Server) getRouter() *chi.Mux {
 			}
 			return nil
 		})
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 
 	filesDir := http.FS(buildFs)
@@ -75,6 +80,7 @@ func (s *Server) getRouter() *chi.Mux {
 	return r
 }
 
+// Start the server
 func (s *Server) Start() {
 	var listener net.Listener
 	var err error
@@ -140,6 +146,7 @@ func (s *Server) Start() {
 	<-idleConnsClosed
 }
 
+// NewServer creates a new server with this configuration
 func NewServer(config Config) *Server {
 	s := &Server{
 		Config: config,
@@ -153,8 +160,7 @@ func NewServer(config Config) *Server {
 	return s
 }
 
-// FileServer conveniently sets up a http.FileServer handler to serve
-// static files from a http.FileSystem.
+// FileServer conveniently sets up a http.FileServer handler to serve static files from a http.FileSystem.
 func FileServer(r chi.Router, path string, root http.FileSystem) {
 	if strings.ContainsAny(path, "{}*") {
 		panic("FileServer does not permit any URL parameters.")

@@ -129,7 +129,7 @@ You can then run the backend with:
 go run cmd/praga/praga.go
 ```
 
-You may want to flip the `DEBUG` constant to `true` in `backend/server.go`.
+You may want to flip the `debug` constant to `true` in `backend/server.go`.
 
 The backend automatically tries to host the built frontend build results from `frontend/build` under `/`,
 while API requests are expected under the `/api` -path.

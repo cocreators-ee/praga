@@ -4,17 +4,20 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/go-chi/chi/v5"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
+
+	"github.com/go-chi/chi/v5"
 )
 
-var config = getTestConfig()
-var testServer = Server{
-	Config: config,
-}
+var (
+	config     = getTestConfig()
+	testServer = Server{
+		Config: config,
+	}
+)
 var testRouter = getTestRouter()
 
 func getTestRouter() *chi.Mux {
@@ -33,14 +36,14 @@ func getTestConfig() Config {
 			Secure:     false,
 		},
 		Auth: AuthConfig{
-			Mode:          "email",
-			EmailProvider: "mailjet",
+			Mode: "email",
 		},
 		Email: EmailConfig{
-			ValidDomains: []string{"example.com"},
-			ValidEmails:  []string{},
-			From:         "auth@example.com",
-			FromName:     "Example Auth",
+			EmailProvider: "mailjet",
+			ValidDomains:  []string{"example.com"},
+			ValidEmails:   []string{},
+			From:          "auth@example.com",
+			FromName:      "Example Auth",
 		},
 		Mailjet: MailjetConfig{
 			APIKeyPublic:  "",
@@ -61,7 +64,7 @@ func getTestConfig() Config {
 func TestRouteEmailVerifyFail(t *testing.T) {
 	// Test that invalid code does not verify
 	buffer := bytes.NewBuffer([]byte{})
-	err := json.NewEncoder(buffer).Encode(EmailVerifyRequest{
+	err := json.NewEncoder(buffer).Encode(emailVerifyRequest{
 		Email: "user@example.com",
 		Code:  "abcd1234",
 	})
@@ -87,7 +90,7 @@ func TestRouteEmailVerifyOk(t *testing.T) {
 	// Test that a valid code verifies
 	buffer := bytes.NewBuffer([]byte{})
 	email := "user@example.com"
-	err := json.NewEncoder(buffer).Encode(EmailVerifyRequest{
+	err := json.NewEncoder(buffer).Encode(emailVerifyRequest{
 		Email: email,
 		Code:  MakeVerifyCodeNow(testServer.Config.SigningKey, email),
 	})
@@ -117,7 +120,7 @@ func TestRouteEmailVerifyPrevious(t *testing.T) {
 	// Test that previous time chunk's code passes verification
 	buffer := bytes.NewBuffer([]byte{})
 	email := "user@example.com"
-	err := json.NewEncoder(buffer).Encode(EmailVerifyRequest{
+	err := json.NewEncoder(buffer).Encode(emailVerifyRequest{
 		Email: email,
 		Code:  MakeVerifyCodeTS(testServer.Config.SigningKey, email, time.Now().Add(-timeChunks)),
 	})
@@ -143,7 +146,7 @@ func TestRouteEmailVerifyExpired(t *testing.T) {
 	// Test that timeChunks * 2 -old code fails verification
 	buffer := bytes.NewBuffer([]byte{})
 	email := "user@example.com"
-	err := json.NewEncoder(buffer).Encode(EmailVerifyRequest{
+	err := json.NewEncoder(buffer).Encode(emailVerifyRequest{
 		Email: email,
 		Code:  MakeVerifyCodeTS(testServer.Config.SigningKey, email, time.Now().Add(-timeChunks*2)),
 	})
@@ -169,7 +172,7 @@ func TestRouteEmailVerifyUpcoming(t *testing.T) {
 	// Test that trying to verify upcoming codes will fail
 	buffer := bytes.NewBuffer([]byte{})
 	email := "user@example.com"
-	err := json.NewEncoder(buffer).Encode(EmailVerifyRequest{
+	err := json.NewEncoder(buffer).Encode(emailVerifyRequest{
 		Email: email,
 		Code:  MakeVerifyCodeTS(testServer.Config.SigningKey, email, time.Now().Add(timeChunks)),
 	})
@@ -195,7 +198,7 @@ func TestRouteEmailSendVerify(t *testing.T) {
 	// Test that you can verify a newly requested code
 	buffer := bytes.NewBuffer([]byte{})
 	email := "user@example.com"
-	err := json.NewEncoder(buffer).Encode(EmailSendRequest{
+	err := json.NewEncoder(buffer).Encode(emailSendRequest{
 		Email: email,
 	})
 	if err != nil {
@@ -218,7 +221,7 @@ func TestRouteEmailSendVerify(t *testing.T) {
 
 	// Test that you can verify a newly requested code
 	buffer = bytes.NewBuffer([]byte{})
-	err = json.NewEncoder(buffer).Encode(EmailVerifyRequest{
+	err = json.NewEncoder(buffer).Encode(emailVerifyRequest{
 		Email: email,
 		Code:  testLastSentCode,
 	})
@@ -241,7 +244,7 @@ func TestRouteEmailSendVerify(t *testing.T) {
 }
 
 func TestRouteVerifyTokenNoCookie(t *testing.T) {
-	req, err := http.NewRequest("POST", "/api/verify-token", nil)
+	req, err := http.NewRequest("GET", "/api/verify-token", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -257,7 +260,7 @@ func TestRouteVerifyTokenNoCookie(t *testing.T) {
 }
 
 func TestRouteVerifyTokenBadCookie(t *testing.T) {
-	req, err := http.NewRequest("POST", "/api/verify-token", nil)
+	req, err := http.NewRequest("GET", "/api/verify-token", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -274,7 +277,7 @@ func TestRouteVerifyTokenBadCookie(t *testing.T) {
 }
 
 func TestRouteVerifyTokenOk(t *testing.T) {
-	req, err := http.NewRequest("POST", "/api/verify-token", nil)
+	req, err := http.NewRequest("GET", "/api/verify-token", nil)
 	if err != nil {
 		t.Fatal(err)
 	}

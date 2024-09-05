@@ -13,20 +13,20 @@ cookie_auth:
   domain: my.domain  # Set to top level domain to protect multiple subdomains
   secure: true  # Make sure to keep this true if this is behind HTTPS, set to false for localhost testing
 
-signing_key: "openssl rand -hex 32"  # Key used to generate verification tokens and sign access tokens
+signing_key: "openssl rand -base64 32"  # Key used to generate verification tokens and sign access tokens
 
 jwt:
   valid_seconds: 86400  # How long the login is valid for, 1 day = 86,400 seconds
 
 auth:
   mode: email  # No other options yet
-  email_provider: mailjet  # No other options yet
 
 mailjet:
   apikey_public: ""  # Also parsing the MJ_APIKEY_PUBLIC environment variable
   apikey_private: ""  # Also parsing the MJ_APIKEY_PRIVATE environment variable
 
 email:
+  email_provider: mailjet  # No other options yet
   from: login@email.my.domain  # The from address for verification codes, ensure it's a valid sender
   from_name: "My Private Area"  # The from "name" for the emails
 

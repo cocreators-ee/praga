@@ -4,15 +4,16 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-playground/validator/v10"
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	"log"
 	"net/http"
 	"reflect"
 	"strings"
 	"time"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 var testLastSentCode = ""
@@ -47,7 +48,7 @@ func clearAuthCookie(srv *Server, w http.ResponseWriter) {
 func makeAuthCookie(srv *Server, email string) *http.Cookie {
 	token, err := MakeToken(srv, email)
 	if err != nil {
-		if DEBUG {
+		if debug {
 			log.Printf("Error making token: %s\n", err)
 		}
 		return nil
@@ -75,9 +76,8 @@ func validateToken(srv *Server, token string) bool {
 
 		return []byte(srv.Config.SigningKey), nil
 	})
-
 	if err != nil {
-		if DEBUG {
+		if debug {
 			log.Printf("Token validation failed: %s\n", err)
 		}
 		return false
@@ -98,7 +98,7 @@ func MakeToken(srv *Server, email string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString([]byte(srv.Config.SigningKey))
 	if err != nil {
-		if DEBUG {
+		if debug {
 			log.Printf("Failed to sign token: %s\n", err)
 		}
 		return "", err
@@ -107,7 +107,7 @@ func MakeToken(srv *Server, email string) (string, error) {
 }
 
 func sendCode(srv *Server, email string, code string) {
-	if DEBUG {
+	if debug {
 		log.Printf("New code for %s: %s", email, code)
 	}
 
@@ -118,7 +118,7 @@ func sendCode(srv *Server, email string, code string) {
 		return
 	}
 
-	if srv.Config.Auth.EmailProvider == "mailjet" {
+	if srv.Config.Email.EmailProvider == "mailjet" {
 		srv.MailjetSender.sendEmailViaMailjet(email, srv.Config.Brand, code, srv.Config.Support)
 	}
 }
@@ -135,7 +135,7 @@ func validateRequest(payload interface{}) bool {
 
 	if err := validate.Struct(payload); err != nil {
 		var validationErrors validator.ValidationErrors
-		if DEBUG {
+		if debug {
 			if errors.As(err, &validationErrors) {
 				for _, verr := range validationErrors {
 					log.Print(strings.Replace(verr.Error(), "Config.", "", 1))
@@ -153,7 +153,7 @@ func validateRequest(payload interface{}) bool {
 func registerRoutes(srv *Server, r *chi.Mux) {
 	// Get relevant configuration for frontend
 	r.Get("/api/config", func(w http.ResponseWriter, r *http.Request) {
-		err := json.NewEncoder(w).Encode(ConfigResponse{
+		err := json.NewEncoder(w).Encode(configResponse{
 			Title:   srv.Config.Title,
 			Brand:   srv.Config.Brand,
 			Support: srv.Config.Support,
@@ -171,7 +171,7 @@ func registerRoutes(srv *Server, r *chi.Mux) {
 		token, err := r.Cookie(srv.Config.CookieAuth.CookieName)
 		if err != nil {
 			// Failed to read cookie
-			if DEBUG {
+			if debug {
 				if errors.Is(err, http.ErrNoCookie) {
 					log.Printf("Verify request missing cookies %s\n", srv.Config.CookieAuth.CookieName)
 				} else {
@@ -201,7 +201,7 @@ func registerRoutes(srv *Server, r *chi.Mux) {
 			return
 		}
 
-		var req EmailSendRequest
+		var req emailSendRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
 		if err != nil {
 			w.WriteHeader(400)
@@ -236,7 +236,7 @@ func registerRoutes(srv *Server, r *chi.Mux) {
 			code := MakeVerifyCodeNow(srv.Config.SigningKey, req.Email)
 			sendCode(srv, req.Email, code)
 		} else {
-			if DEBUG {
+			if debug {
 				log.Printf("%s is not allowed to log in", req.Email)
 			}
 		}
@@ -252,7 +252,7 @@ func registerRoutes(srv *Server, r *chi.Mux) {
 			return
 		}
 
-		var req EmailVerifyRequest
+		var req emailVerifyRequest
 		err := json.NewDecoder(r.Body).Decode(&req)
 		if err != nil {
 			w.WriteHeader(400)
