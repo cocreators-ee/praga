@@ -47,19 +47,19 @@ jobs:
 
       - name: Build for Linux amd64
         run: |
-          go build -o artifacts/praga-linux-amd64
+          go build -o artifacts/praga-linux-amd64 cmd/praga/praga.go
 
       - name: Build for Linux arm64
         run: |
-          GOARCH=arm64 go build -o artifacts/praga-linux-arm64
+          GOARCH=arm64 go build -o artifacts/praga-linux-arm64 cmd/praga/praga.go
 
       - name: Build for Windows amd64
         run: |
-          GOOS=windows GOARCH=amd64 go build -o artifacts/praga-windows-amd64.exe
+          GOOS=windows GOARCH=amd64 go build -o artifacts/praga-windows-amd64.exe cmd/praga/praga.go
 
       - name: Build for Windows arm64
         run: |
-          GOOS=windows GOARCH=arm64 go build -o artifacts/praga-windows-arm64.exe
+          GOOS=windows GOARCH=arm64 go build -o artifacts/praga-windows-arm64.exe cmd/praga/praga.go
 
       # TODO: macOS build
 
