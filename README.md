@@ -29,6 +29,12 @@ TODO:
 - Implement rate limits for email sending and code verification
 - Limit redirect targets from configuration
 
+You can check if your Nginx install supports the auth request module with:
+
+```shell
+nginx -V 2>&1 | grep --color=always http_auth_request
+```
+
 # Running
 
 Build Praga first or get the prebuilt binary release, then ensure you have a `praga.yaml` configured and run:
