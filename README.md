@@ -65,11 +65,11 @@ See [praga.tpl.yaml](./praga.tpl.yaml) for information on what all things are co
 
 In practice running Praga as a service can be done fairly easily:
 
-1. Set up your `praga.yaml` in `/etc/praga.yaml`
-2. Create [/start-praga.sh](./start-praga.sh) (remember `chmod +x`)
-3. Create [/etc/systemd/system/praga.service](./praga.service)
-4. `systemctl daemon-reload`
-5. `systemctl enable --now praga`
+1. `wget https://github.com/cocreators-ee/praga/releases/latest/download/praga-linux-amd64; chmod +x /usr/bin/praga-linux-amd64; mv praga-linux-amd64 /usr/bin/praga`
+2. Set up your `praga.yaml` in `/etc/praga.yaml`
+3. Create [/start-praga.sh](./start-praga.sh) (remember `chmod +x`)
+4. Create [/etc/systemd/system/praga.service](./praga.service)
+5. `systemctl daemon-reload; systemctl enable --now praga`
 
 # Docker example
 
