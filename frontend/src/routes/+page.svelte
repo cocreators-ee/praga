@@ -124,6 +124,13 @@
     }
   }
 
+  // Try to scale down gracefully when having issues to fit, mobile
+  @media screen and (max-width: 490px) {
+    section {
+      width: calc(100vw - 75px - 2rem - 2rem);
+    }
+  }
+
   .header-icon {
     $size: 8rem;
     width: $size;
