@@ -102,6 +102,7 @@
     font-size: 1.5rem;
     color: $text-bright;
     text-align: center;
+    line-height: 125%;
 
     margin-top: 2.5rem;
     margin-bottom: 3rem;
