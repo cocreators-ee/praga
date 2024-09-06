@@ -1,0 +1,28 @@
+# /etc/praga.yaml
+
+title: Secret Login  # Webpage title
+brand: Private Work site  # Used in emails and on the webpage
+support: support@my.domain  # Shared in emails and on the webpage as contact information for support
+
+server:
+  listen_type: unix  # http or unix
+  socket: /run/praga/praga.sock
+
+cookie_auth:
+  cookie_name: PRAGA_TOKEN
+  domain: my.domain  # Set to top level domain to protect multiple subdomains
+  secure: true  # Make sure to keep this true if this is behind HTTPS, set to false for localhost testing
+
+signing_key: "openssl rand -base64 32"
+
+email:
+  from: praga@login.my.domain  # The from address for verification codes, ensure it's a valid sender
+  from_name: "Praga login to Private Work Site"  # The from "name" for the emails
+
+  # Allow entire domains to log in
+  valid_domains:
+    - my.domain
+
+  # Allow individual email addresses
+  valid_emails:
+    - external.collaborator@gmail.com

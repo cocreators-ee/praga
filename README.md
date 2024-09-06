@@ -28,6 +28,7 @@ TODO:
 - Implement rate limits for email sending and code verification
 - Limit redirect targets from configuration
 - Better socket handling, to avoid needing wrapping in a shell script
+- A method to reload the configuration without restarting the server e.g. via SIGHUP
 
 You can check if your Nginx install supports the auth request module with:
 
@@ -53,7 +54,8 @@ If you want to use a unix socket for connecting, ensure the path exists with the
 you run `praga` as the correct user, like the same one Nginx is running as. You can check
 e.g. [start-praga.sh](./start-praga.sh) for an example.
 
-Check the [Nginx configuration example](./examples/nginx-simple) for a [praga.yaml](./examples/nginx-simple/praga.yaml) and
+Check the [Nginx configuration example](./examples/nginx-simple) for
+a [praga.yaml](./examples/nginx-simple/praga.yaml) and
 [nginx site.conf](./examples/nginx-simple/nginx-site.conf) that can help you get started with setup.
 
 See [praga.tpl.yaml](./praga.tpl.yaml) for information on what all things are configurable, key highlights:
@@ -69,6 +71,10 @@ In practice running Praga as a service can be done fairly easily:
 3. Create [/start-praga.sh](./start-praga.sh) (remember `chmod +x`)
 4. Create [/etc/systemd/system/praga.service](./praga.service)
 5. `systemctl daemon-reload; systemctl enable --now praga`
+
+# Examples
+
+Check out the [examples](./examples) -folder for a couple of different examples of how to deploy Praga.
 
 # Docker example
 
