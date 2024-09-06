@@ -32,7 +32,7 @@ RUN go build ./cmd/praga/praga.go
 FROM nginx AS runtime
 
 COPY --from=praga-build /go/src/cocreators-ee/praga/praga /usr/bin/praga
-COPY examples/nginx/index.html /usr/share/nginx/html/index.html
-COPY examples/nginx/99-start-praga.sh /docker-entrypoint.d/
-COPY examples/nginx/nginx-site.conf /etc/nginx/conf.d/default.conf
-COPY examples/nginx/praga.yaml /etc/praga.yaml
+COPY examples/nginx-simple/index.html /usr/share/nginx/html/index.html
+COPY examples/nginx-simple/99-start-praga.sh /docker-entrypoint.d/
+COPY examples/nginx-simple/nginx-site.conf /etc/nginx/conf.d/default.conf
+COPY examples/nginx-simple/praga.yaml /etc/praga.yaml

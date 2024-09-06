@@ -25,7 +25,6 @@ Read more on `ngx_http_auth_request_module` usage at:
 
 TODO:
 
-- Release pipeline
 - Implement rate limits for email sending and code verification
 - Limit redirect targets from configuration
 - Better socket handling, to avoid needing wrapping in a shell script
@@ -54,8 +53,8 @@ If you want to use a unix socket for connecting, ensure the path exists with the
 you run `praga` as the correct user, like the same one Nginx is running as. You can check
 e.g. [start-praga.sh](./start-praga.sh) for an example.
 
-Check the [Nginx configuration example](./examples/nginx) for a [praga.yaml](./examples/nginx/praga.yaml) and
-[nginx site.conf](./examples/nginx/nginx-site.conf) that can help you get started with setup.
+Check the [Nginx configuration example](./examples/nginx-simple) for a [praga.yaml](./examples/nginx-simple/praga.yaml) and
+[nginx site.conf](./examples/nginx-simple/nginx-site.conf) that can help you get started with setup.
 
 See [praga.tpl.yaml](./praga.tpl.yaml) for information on what all things are configurable, key highlights:
 
