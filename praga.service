@@ -1,0 +1,9 @@
+[Unit]
+Description=Praga - Proxy Auth Gateway
+
+[Service]
+ExecStart=/start-praga.sh
+Restart=always
+
+[Install]
+WantedBy=default.target

@@ -28,6 +28,7 @@ TODO:
 - Release pipeline
 - Implement rate limits for email sending and code verification
 - Limit redirect targets from configuration
+- Better socket handling, to avoid needing wrapping in a shell script
 
 You can check if your Nginx install supports the auth request module with:
 
@@ -49,6 +50,10 @@ or
 ./praga --config=path/to/praga.yaml
 ```
 
+If you want to use a unix socket for connecting, ensure the path exists with the right permissions and that
+you run `praga` as the correct user, like the same one Nginx is running as. You can check
+e.g. [start-praga.sh](./start-praga.sh) for an example.
+
 Check the [Nginx configuration example](./examples/nginx) for a [praga.yaml](./examples/nginx/praga.yaml) and
 [nginx site.conf](./examples/nginx/nginx-site.conf) that can help you get started with setup.
 
@@ -57,6 +62,14 @@ See [praga.tpl.yaml](./praga.tpl.yaml) for information on what all things are co
 - Valid email domains or individual email addresses for login
 - Authentication token lifetime (defaults to 1 day)
 - Customization of names and support information shown to users
+
+In practice running Praga as a service can be done fairly easily:
+
+1. Set up your `praga.yaml` in `/etc/praga.yaml`
+2. Create [/start-praga.sh](./start-praga.sh) (remember `chmod +x`)
+3. Create [/etc/systemd/system/praga.service](./praga.service)
+4. `systemctl daemon-reload`
+5. `systemctl enable --now praga`
 
 # Docker example
 
