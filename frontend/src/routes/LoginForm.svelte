@@ -35,13 +35,17 @@
       activeForm.reportValidity()
     }
   }
+
+  function focus(el: HTMLInputElement) {
+    el.focus()
+  }
 </script>
 
 {#if state === "email"}
 
   <form bind:this={activeForm} on:submit|preventDefault={onRequestCode} transition:slide={{}}>
     <label for="email">Email</label>
-    <input bind:this={errorField} on:keydown={clearCustomValidity} id="email" name="email" type="email"
+    <input use:focus bind:this={errorField} on:keydown={clearCustomValidity} id="email" name="email" type="email"
            placeholder="user@example.com" required bind:value={email}>
     <div class="buttons">
       <button type="submit">
@@ -59,7 +63,7 @@
 
   <form bind:this={activeForm} on:submit|preventDefault={onVerifyCode} transition:slide={{}}>
     <label for="code">Verification code</label>
-    <input bind:this={errorField} on:keydown={clearCustomValidity} id="code" name="code" type="text"
+    <input use:focus bind:this={errorField} on:keydown={clearCustomValidity} id="code" name="code" type="text"
            placeholder="ABCD1234" required bind:value={code}>
     <div class="buttons">
       <button type="submit">
