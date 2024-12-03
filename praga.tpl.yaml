@@ -13,7 +13,7 @@ cookie_auth:
   domain: my.domain  # Set to top level domain to protect multiple subdomains
   secure: true  # Make sure to keep this true if this is behind HTTPS, set to false for localhost testing
 
-signing_key: "openssl rand -base64 32"  # Key used to generate verification tokens and sign access tokens
+signing_key: "openssl rand -base64 32"  # Key used to generate verification tokens and sign access tokens, can also be overridden using PRAGA_SIGNING_KEY environment variable
 
 jwt:
   valid_seconds: 86400  # How long the login is valid for, 1 day = 86,400 seconds
