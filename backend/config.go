@@ -101,6 +101,12 @@ func LoadConfig(configPath string) (bool, Config) {
 		log.Fatal(err)
 	}
 
+	// Allow PRAGA_SIGNING_KEY environment override
+	signingKey := os.Getenv("PRAGA_SIGNING_KEY")
+	if signingKey != "" {
+		c.SigningKey = signingKey
+	}
+
 	if c.SigningKey == "openssl rand -hex 32" {
 		log.Fatal("Generate a new signing_key in the configuration e.g. with: openssl rand -hex 32")
 	}
