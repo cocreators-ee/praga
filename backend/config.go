@@ -101,14 +101,20 @@ func LoadConfig(configPath string) (bool, Config) {
 		log.Fatal(err)
 	}
 
+	// Allow PRAGA_SIGNING_KEY environment override
+	signingKey := os.Getenv("PRAGA_SIGNING_KEY")
+	if signingKey != "" {
+		c.SigningKey = signingKey
+	}
+
 	if c.SigningKey == "openssl rand -hex 32" {
 		log.Fatal("Generate a new signing_key in the configuration e.g. with: openssl rand -hex 32")
 	}
 
 	// Allow MJ_APIKEY_PRIVATE and MJ_APIKEY_PUBLIC environment overrides
-	mkAPIKeyPrivate := os.Getenv("MJ_APIKEY_PRIVATE")
-	if mkAPIKeyPrivate != "" {
-		c.Mailjet.APIKeyPrivate = mkAPIKeyPrivate
+	mjAPIKeyPrivate := os.Getenv("MJ_APIKEY_PRIVATE")
+	if mjAPIKeyPrivate != "" {
+		c.Mailjet.APIKeyPrivate = mjAPIKeyPrivate
 	}
 
 	mjAPIKeyPublic := os.Getenv("MJ_APIKEY_PUBLIC")
