@@ -43,7 +43,7 @@ jobs:
 
       - name: Build frontend
         run: |
-          pnpm -C frontend build
+          NODE_ENV=production pnpm -C frontend build
 
       - name: Build for Linux amd64
         run: |
