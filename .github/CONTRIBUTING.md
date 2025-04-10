@@ -10,7 +10,7 @@ We are committed to providing a welcoming and respectful community for everyone.
 
 1. **Discuss first:** Before tackling a significant change or feature, please open an issue to discuss your idea. This helps ensure it aligns with the project's goals and avoids wasted effort.
 
-2. **Code style & formatting:** We aim for consistent code style throughout the project. 
+2. **Code style & formatting:** We aim for consistent code style throughout the project.
    * Please run any automated formatting tools included in this repository (e.g., `pre-commit`, `prettier`, `ruff`, `go fmt`). Check the `.editorconfig` or build scripts for details.
    * Try to follow existing coding conventions within the codebase.
 
